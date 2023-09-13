@@ -1,41 +1,43 @@
-import * as React from 'react';
-import { useState } from 'react';
-import './style.css';
+import { useState } from 'react'
+import './App.css'
+import { StartScreen } from './components/StartScreen'
+import { wordList } from './data/data'
+import Game from './components/Game'
+import GameOver from './components/GameOver'
+import React from 'react'
 
-export default function App() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+const stages = [
+  {id: 1, name:"Start"},
+  {id: 2, name:"Game"},
+  {id: 3, name:"End"}
+]
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Enviando o formulário');
-    console.log(name, email);
 
-    setEmail(' ');
-    setName(' ');
-  };
+function App() {
+ 
+  const [gameStage, setGameStage] = useState(stages[0].name)
+  const [words] = useState(wordList)
+  
+
+  const startGame = () => {
+    setGameStage(stages[1].name)
+  }
+
+  const verifyLetter = () => {
+    setGameStage(stages[2].name)
+  }
+  
+  const retry = () => {
+    setGameStage(stages[0].name)
+  }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name"> Nome </label>
-        <input
-          type="text"
-          name="name"
-          placeholder="Digite o seu nome"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <br />
-        <br />
-        <label htmlFor="name"> E-mail </label>
-        <input
-          type="text"
-          name="name"
-          placeholder="Digite o seu nome"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button>Enviar</button>
-      </form>
-    </div>
-  );
+    <>
+    {gameStage === "Start" && <StartScreen startGame = {startGame} />}
+    {gameStage === "Game" && <Game verifyLetter = {verifyLetter}/>}
+    {gameStage === "End" && <GameOver retry={retry} />}
+    </>
+  )
 }
+
+export default App
